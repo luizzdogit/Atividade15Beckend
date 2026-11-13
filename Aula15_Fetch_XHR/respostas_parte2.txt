@@ -1,0 +1,28 @@
+PARTE 2 — Complete o Comando
+
+a) Criar uma nova instância de XMLHttpRequest:
+const xhr = new XMLHttpRequest();
+Cria o objeto que será usado para configurar e enviar a requisição XHR.
+
+b) Preparar uma requisição GET sem enviá-la:
+xhr.open("GET", "https://jsonplaceholder.typicode.com/posts/1");
+open() configura o método e a URL; a requisição só será enviada ao chamar send().
+
+c) Disparar a requisição preparada:
+xhr.send();
+Envia a requisição configurada com open().
+
+d) Converter o texto JSON da resposta em objeto:
+const dados = JSON.parse(xhr.responseText);
+Use dentro do tratamento da resposta, depois que o XHR terminar com status 200.
+JSON.parse() transforma o texto JSON recebido em um valor JavaScript.
+
+e) Iniciar uma requisição usando Fetch API:
+fetch("https://jsonplaceholder.typicode.com/posts/1");
+fetch() inicia uma requisição e retorna uma Promise.
+
+f) Converter a resposta do fetch() em JSON no primeiro .then():
+fetch("https://jsonplaceholder.typicode.com/posts/1")
+  .then((response) => response.json());
+O primeiro .then() recebe a resposta HTTP e response.json() lê e converte o corpo
+JSON, retornando uma Promise com os dados convertidos.

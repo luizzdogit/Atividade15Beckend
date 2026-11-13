@@ -1,0 +1,52 @@
+PARTE 3 — Encontre o Erro
+
+Cenário A — Fetch sem tratamento de erro
+
+Problema:
+Sem tratamento de falhas, erros de rede ou de leitura do JSON podem ficar sem
+tratamento. Além disso, fetch() não rejeita a Promise só porque o servidor
+respondeu com um status HTTP de erro, como 404 ou 500.
+
+Por que tratar erros:
+O tratamento permite identificar falhas, exibir informações úteis no Console e
+evitar que a aplicação continue como se tivesse recebido dados válidos.
+
+Código corrigido:
+const url = "https://jsonplaceholder.typicode.com/posts/1";
+
+fetch(url)
+  .then((response) => {
+    if (!response.ok) {
+      throw new Error("Erro HTTP: " + response.status);
+    }
+    return response.json();
+  })
+  .then((dados) => {
+    console.log("Dados recebidos:", dados);
+  })
+  .catch((erro) => {
+    console.error("Não foi possível concluir a requisição:", erro);
+  });
+
+response.ok verifica se o status HTTP está na faixa de sucesso. Ao lançar um
+erro para uma resposta HTTP malsucedida, ele também é recebido pelo .catch().
+O .catch() trata esse erro e outras rejeições, como falhas de rede ou do JSON.
+
+Cenário B — Verificação incompleta no XHR
+
+O que faltava:
+O código já verifica requisicao.readyState === 4, que indica que a requisição
+foi concluída. Falta verificar requisicao.status === 200 antes de interpretar
+a resposta, para não tentar processar como sucesso uma resposta HTTP de erro,
+como 404 ou 500.
+
+Código corrigido:
+requisicao.onreadystatechange = function() {
+  if (requisicao.readyState === 4 && requisicao.status === 200) {
+    const dados = JSON.parse(requisicao.responseText);
+    console.log(dados);
+  }
+};
+
+A condição mantém a verificação de conclusão que já existia e acrescenta o
+status 200. Assim, JSON.parse() só é chamado após uma resposta HTTP bem-sucedida.
